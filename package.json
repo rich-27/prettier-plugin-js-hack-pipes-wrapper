@@ -1,0 +1,34 @@
+{
+  "name": "prettier-plugin-js-hack-pipes-wrapper",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "test/format.js",
+  "scripts": {
+    "execute": "node test/format.js"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.28.4",
+    "@babel/plugin-proposal-pipeline-operator": "^7.27.1",
+    "@babel/preset-env": "^7.28.3",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.6.2"
+  },
+  "peerDependencies": {
+    "@typescript-eslint/visitor-keys": "^8.44.1",
+    "angular-estree-parser": "^13.0.2",
+    "emoji-regex": "^10.5.0",
+    "get-east-asian-width": "^1.4.0",
+    "hermes-parser": "^0.32.1",
+    "is-es5-identifier-name": "^1.0.0",
+    "jest-docblock": "^30.0.1",
+    "prettier": "^3.6.2",
+    "to-fast-properties": "^4.0.0",
+    "trim-newlines": "^5.0.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.28.4",
+    "@babel/parser": "^7.28.4",
+    "cosmiconfig": "^9.0.0"
+  }
+}

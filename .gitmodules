@@ -1,0 +1,3 @@
+[submodule "vendor/prettier"]
+	path = vendor/prettier
+	url = https://github.com/prettier/prettier
