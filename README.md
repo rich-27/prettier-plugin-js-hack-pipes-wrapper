@@ -1,4 +1,4 @@
-# Patching JS Hack Pipes in Prettier [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+# Patching JS Hack Pipes in Prettier   [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 `prettier-plugin-js-hack-pipes-wrapper` is a [Prettier](https://prettier.io/) plugin that enables formatting using JavaScript's proposed Hack pipe operator with the topic token specified in your Babel configuration.
 
