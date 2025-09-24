@@ -5,9 +5,8 @@
   "type": "module",
   "main": "src/plugin.js",
   "scripts": {
-    "testCliCheck": "prettier test/test-code.js --check",
-    "testCliWrite": "prettier test/test-code.js --write",
-    "testApi": "node test/format.js"
+    "testCheck": "prettier . --check",
+    "testWrite": "prettier . --write"
   },
   "repository": {
     "type": "git",
