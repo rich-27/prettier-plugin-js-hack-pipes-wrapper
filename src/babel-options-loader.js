@@ -1,14 +1,8 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { loadOptions, loadPartialConfig } from '@babel/core';
-import { cosmiconfigSync, defaultLoadersSync } from 'cosmiconfig';
-import { BABEL_CONFIG_FILENAMES } from './babel-config-filenames.js';
-
-const BABEL_PLUGIN_KEY = 'proposal-pipeline-operator';
-const BABEL_PLUGIN_NAME = `@babel/plugin-${BABEL_PLUGIN_KEY}`;
 
 /**
- * Each of the three methods below of getting Babel config exposes plugin configuration
+ * Each of the three sources of getting Babel config below exposes plugin configuration
  * in different formats, hence needing three separate loader implementations.
  *
  * Option 1, BabelLoadOptionsLoader:
@@ -31,57 +25,6 @@ const BABEL_PLUGIN_NAME = `@babel/plugin-${BABEL_PLUGIN_KEY}`;
  *  - Uses search strategy and search places derived from babel's source code (as of @babel/core@7.28.4)
  */
 
-class BabelLoadOptionsLoader {
-  static getTopicToken(searchFrom) {
-    return BabelLoadOptionsLoader.#extractTopicToken(
-      loadOptions({ cwd: searchFrom }),
-    );
-  }
-
-  static #extractTopicToken({ plugins }) {
-    return plugins.find(({ key }) => key === BABEL_PLUGIN_KEY)?.options
-      ?.topicToken;
-  }
-}
-
-class BabelLoadPartialConfigLoader {
-  static getTopicToken(searchFrom) {
-    return BabelLoadPartialConfigLoader.#extractTopicToken(
-      loadPartialConfig({ cwd: searchFrom }).options,
-    );
-  }
-
-  static #extractTopicToken({ plugins }) {
-    return plugins.find(
-      ({ file }) =>
-        file?.request === BABEL_PLUGIN_NAME ||
-        new RegExp(BABEL_PLUGIN_NAME).test(file?.resolved),
-    )?.options?.topicToken;
-  }
-}
-
-class CosmiconfigLoader {
-  static getTopicToken(searchFrom) {
-    const babelConfig = cosmiconfigSync('babel', {
-      searchStrategy: 'global',
-      searchPlaces: BABEL_CONFIG_FILENAMES,
-      loaders: {
-        '.mjs': defaultLoadersSync['.js'],
-        '.cts': defaultLoadersSync['.ts'],
-        '.mts': defaultLoadersSync['.ts'],
-      },
-    }).search(searchFrom);
-    return CosmiconfigLoader.#extractTopicToken(
-      babelConfig?.config ?? { plugins: [] },
-    );
-  }
-
-  static #extractTopicToken({ plugins }) {
-    return plugins.find(([name]) => name === BABEL_PLUGIN_NAME)?.[1]
-      ?.topicToken;
-  }
-}
-
 export class BabelOptionsLoader {
   static Sources = Object.freeze({
     BABEL_LOAD_OPTIONS: 'loadOptions',
@@ -96,8 +39,8 @@ export class BabelOptionsLoader {
     this.#source = this.#resolveSource(source);
   }
 
-  getTopicToken() {
-    return this.#source.getTopicToken(this.searchFromPath);
+  async getTopicToken() {
+    return (await this.#source).getTopicToken(this.searchFromPath);
   }
 
   #getDirectory(fileOrDirectoryPath) {
@@ -121,14 +64,14 @@ export class BabelOptionsLoader {
     }
   }
 
-  #resolveSource(source) {
+  async #resolveSource(source) {
     switch (source) {
       case BabelOptionsLoader.Sources.BABEL_LOAD_OPTIONS:
-        return BabelLoadOptionsLoader;
+        return (await import('./babel-options-loaders/babel-loaders.js')).BabelLoadOptionsLoader;
       case BabelOptionsLoader.Sources.BABEL_LOAD_PARTIAL_CONFIG:
-        return BabelLoadPartialConfigLoader;
+        return (await import('./babel-options-loaders/babel-loaders.js')).BabelLoadPartialConfigLoader;
       default:
-        return CosmiconfigLoader;
+        return (await import('./babel-options-loaders/cosmiconfig-loader.js')).CosmiconfigLoader;
     }
   }
 }

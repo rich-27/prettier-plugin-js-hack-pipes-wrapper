@@ -20,7 +20,7 @@ export const languages = [
 export const parsers = {
   '|>-babel-wrapper': {
     ...defaultParser,
-    parse: function (text, options) {
+    parse: async function (text, options) {
       const babelOptionsLoader = new BabelOptionsLoader(
         options.filepath ?? path.resolve('./'),
       );
@@ -28,7 +28,7 @@ export const parsers = {
       // Set this to pass it to the printer
       // Use the prettier default topic token ('%') if we can't get one from a babel config
       options.hackPipeTopicToken =
-        babelOptionsLoader.getTopicToken() ?? getWrappedParserTopicToken();
+        (await babelOptionsLoader.getTopicToken()) ?? getWrappedParserTopicToken();
 
       // Inject the found token into the plugin's 'babel' parser instance
       setWrappedParserTopicToken(options.hackPipeTopicToken);
