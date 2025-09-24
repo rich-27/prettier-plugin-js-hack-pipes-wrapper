@@ -1,11 +1,24 @@
 {
   "name": "prettier-plugin-js-hack-pipes-wrapper",
   "version": "1.0.0",
+  "description": "prettier plugin to enable using your Babel configuration to specify the JS TC39 propsed Hack pipe operator topic token",
   "type": "module",
-  "main": "test/format.js",
+  "main": "src/plugin.js",
   "scripts": {
-    "execute": "node test/format.js"
+    "testCliCheck": "prettier test/test-code.js --check",
+    "testCliWrite": "prettier test/test-code.js --write",
+    "testApi": "node test/format.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rich-27/prettier-plugin-js-hack-pipes-wrapper.git"
+  },
+  "author": "Richard Lewis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rich-27/prettier-plugin-js-hack-pipes-wrapper/issues"
+  },
+  "homepage": "https://github.com/rich-27/prettier-plugin-js-hack-pipes-wrapper#readme",
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.4",
     "@babel/plugin-proposal-pipeline-operator": "^7.27.1",

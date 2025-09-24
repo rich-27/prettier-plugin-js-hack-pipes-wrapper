@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import prettier from 'prettier';
 
-const testFile = fs.readFileSync('test/test.js', 'utf8');
+const testFile = fs.readFileSync('test/test-code.js', 'utf8');
 const formatted = await prettier.format(testFile, {
   parser: '|>-babel-wrapper',
   printer: '|>-wrapped-ast',
