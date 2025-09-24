@@ -28,8 +28,8 @@ export const parsers = {
       // Set this to pass it to the printer
       // Use the prettier default topic token ('%') if we can't get one from a babel config
       options.hackPipeTopicToken =
-          babelOptionsLoader.getTopicToken() ?? getWrappedParserTopicToken();
-      
+        babelOptionsLoader.getTopicToken() ?? getWrappedParserTopicToken();
+
       // Inject the found token into the plugin's 'babel' parser instance
       setWrappedParserTopicToken(options.hackPipeTopicToken);
 
@@ -50,5 +50,3 @@ export const printers = {
     },
   },
 };
-
-export default { languages, parsers, printers };
