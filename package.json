@@ -1,6 +1,6 @@
 {
   "name": "prettier-plugin-js-hack-pipes-wrapper",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "prettier plugin to enable using your Babel configuration to specify the JS TC39 propsed Hack pipe operator topic token",
   "type": "module",
   "main": "src/plugin.js",
