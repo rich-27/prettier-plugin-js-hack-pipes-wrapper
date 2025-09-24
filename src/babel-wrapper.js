@@ -18,12 +18,13 @@ export function setBabelParserTopicToken(topicToken) {
   pipelineOperatorPlugins[0][1].topicToken = topicToken;
 }
 
+// Unused code is commented out
 // BEGIN 'prettier/src/language-js/parse/babel.js'
 
 import { parse as babelParse, parseExpression } from '@babel/parser';
-import getNextNonSpaceNonCommentCharacterIndex from '../vendor/prettier/src/utils/get-next-non-space-non-comment-character-index.js';
+// import getNextNonSpaceNonCommentCharacterIndex from '../vendor/prettier/src/utils/get-next-non-space-non-comment-character-index.js';
 import tryCombinations from '../vendor/prettier/src/utils/try-combinations.js';
-import getShebang from '../vendor/prettier/src/language-js/utils/get-shebang.js';
+// import getShebang from '../vendor/prettier/src/language-js/utils/get-shebang.js';
 import postprocess from '../vendor/prettier/src/language-js/parse/postprocess/index.js';
 import createBabelParseError from '../vendor/prettier/src/language-js/parse/utils/create-babel-parse-error.js';
 import createParser from '../vendor/prettier/src/language-js/parse/utils/create-parser.js';
@@ -93,28 +94,28 @@ const appendPlugins = (plugins, options = parseOptions) => ({
   plugins: [...options.plugins, ...plugins],
 });
 
-// Similar to babel
-// https://github.com/babel/babel/pull/7934/files#diff-a739835084910b0ee3ea649df5a4d223R67
-const FLOW_PRAGMA_REGEX = /@(?:no)?flow\b/u;
-function isFlowFile(text, filepath) {
-  if (filepath?.endsWith('.js.flow')) {
-    return true;
-  }
+// // Similar to babel
+// // https://github.com/babel/babel/pull/7934/files#diff-a739835084910b0ee3ea649df5a4d223R67
+// const FLOW_PRAGMA_REGEX = /@(?:no)?flow\b/u;
+// function isFlowFile(text, filepath) {
+//   if (filepath?.endsWith('.js.flow')) {
+//     return true;
+//   }
 
-  const shebang = getShebang(text);
-  if (shebang) {
-    text = text.slice(shebang.length);
-  }
+//   const shebang = getShebang(text);
+//   if (shebang) {
+//     text = text.slice(shebang.length);
+//   }
 
-  const firstNonSpaceNonCommentCharacterIndex =
-    getNextNonSpaceNonCommentCharacterIndex(text, 0);
+//   const firstNonSpaceNonCommentCharacterIndex =
+//     getNextNonSpaceNonCommentCharacterIndex(text, 0);
 
-  if (firstNonSpaceNonCommentCharacterIndex !== false) {
-    text = text.slice(0, firstNonSpaceNonCommentCharacterIndex);
-  }
+//   if (firstNonSpaceNonCommentCharacterIndex !== false) {
+//     text = text.slice(0, firstNonSpaceNonCommentCharacterIndex);
+//   }
 
-  return FLOW_PRAGMA_REGEX.test(text);
-}
+//   return FLOW_PRAGMA_REGEX.test(text);
+// }
 
 function parseWithOptions(parse, text, options) {
   const ast = parse(text, options);
@@ -134,13 +135,13 @@ function createParse({ isExpression = false, optionsCombinations }) {
       filepath = undefined;
     }
 
-    if (
-      (options.parser === 'babel' || options.parser === '__babel_estree') &&
-      isFlowFile(text, filepath)
-    ) {
-      options.parser = 'babel-flow';
-      return babelFlow.parse(text, options);
-    }
+    // if (
+    //   (options.parser === 'babel' || options.parser === '__babel_estree') &&
+    //   isFlowFile(text, filepath)
+    // ) {
+    //   options.parser = 'babel-flow';
+    //   return babelFlow.parse(text, options);
+    // }
 
     let combinations = optionsCombinations;
     const sourceType = options.__babelSourceType ?? getSourceType(filepath);
