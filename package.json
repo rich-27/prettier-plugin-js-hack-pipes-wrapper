@@ -11,7 +11,14 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/rich-27/prettier-plugin-js-hack-pipes-wrapper.git"
-  },
+  },"keywords": [
+    "prettier",
+    "prettier-plugin",
+    "javascript",
+    "pipeline-operator",
+    "babel",
+    "formatting"
+  ],
   "author": "Richard Lewis",
   "license": "MIT",
   "bugs": {
