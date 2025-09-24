@@ -4,8 +4,56 @@ import { loadOptions, loadPartialConfig } from '@babel/core';
 import { cosmiconfigSync, defaultLoadersSync } from 'cosmiconfig';
 import { BABEL_CONFIG_FILENAMES } from './babel-config-filenames.js';
 
-const BABEL_PLUGIN_KEY = 'proposal-pipeline-operator';
-const BABEL_PLUGIN_NAME = `@babel/plugin-${BABEL_PLUGIN_KEY}`;
+class BabelOptionsLoader {
+  constructor(searchFromPath) {
+    this.searchFromPath = this.#getDirectory(searchFromPath);
+  }
+
+  getTopicToken() {
+    return this._extractPluginOptions(this._getBabelOptions())?.topicToken;
+  }
+
+  /**
+   * Find babel options
+   * @returns {{ plugins: unknown[] }}
+   */
+  _getBabelOptions() {
+    throw new Error('Subclass must implement _getBabelOptions()');
+  }
+
+  /**
+   * Extract topic token from babel options
+   * @param {object} babelOptions
+   * @param {unknown[]} babelOptions.plugins
+   */
+  // eslint-disable-next-line no-unused-vars
+  _extractPluginOptions({ plugins }) {
+    throw new Error(
+      `Subclass must implement _extractPluginOptions({ plugins })`,
+    );
+  }
+
+  #getDirectory(fileOrDirectoryPath) {
+    const resolvedPath = path.resolve(path.normalize(fileOrDirectoryPath));
+
+    let isDirectory;
+    try {
+      isDirectory = fs.lstatSync(resolvedPath).isDirectory();
+    } catch {
+      /**
+       * lstat failed, assume it's a directory (avoids pruning the directory off the end) and hand it off to cosmiconfig/babel.
+       * They'll give more specific errors if it doesn't work as the searchFrom or cwd parameters.
+       */
+      return resolvedPath;
+    }
+
+    if (isDirectory) {
+      return resolvedPath;
+    } else {
+      return path.dirname(resolvedPath);
+    }
+  }
+}
 
 /**
  * Each of the three methods below of getting Babel config exposes plugin configuration
@@ -31,37 +79,35 @@ const BABEL_PLUGIN_NAME = `@babel/plugin-${BABEL_PLUGIN_KEY}`;
  *  - Uses search strategy and search places derived from babel's source code (as of @babel/core@7.28.4)
  */
 
-class BabelLoadOptionsLoader {
-  static getTopicToken(searchFrom) {
-    return BabelLoadOptionsLoader.#extractTopicToken(
-      loadOptions({ cwd: searchFrom }),
-    );
+const BABEL_PLUGIN_KEY = 'proposal-pipeline-operator';
+const BABEL_PLUGIN_NAME = `@babel/plugin-${BABEL_PLUGIN_KEY}`;
+
+export class BabelLoadOptionsLoader extends BabelOptionsLoader {
+  _getBabelOptions() {
+    return loadOptions({ cwd: this.searchFrom });
   }
 
-  static #extractTopicToken({ plugins }) {
-    return plugins.find(({ key }) => key === BABEL_PLUGIN_KEY)?.options
-      ?.topicToken;
+  _extractPluginOptions({ plugins }) {
+    return plugins.find(({ key }) => key === BABEL_PLUGIN_KEY)?.options;
   }
 }
 
-class BabelLoadPartialConfigLoader {
-  static getTopicToken(searchFrom) {
-    return BabelLoadPartialConfigLoader.#extractTopicToken(
-      loadPartialConfig({ cwd: searchFrom }).options,
-    );
+export class BabelLoadPartialConfigLoader extends BabelOptionsLoader {
+  _getBabelOptions() {
+    return loadPartialConfig({ cwd: this.searchFrom }).options;
   }
 
-  static #extractTopicToken({ plugins }) {
+  _extractPluginOptions({ plugins }) {
     return plugins.find(
       ({ file }) =>
         file?.request === BABEL_PLUGIN_NAME ||
         new RegExp(BABEL_PLUGIN_NAME).test(file?.resolved),
-    )?.options?.topicToken;
+    )?.options;
   }
 }
 
-class CosmiconfigLoader {
-  static getTopicToken(searchFrom) {
+export class CosmiconfigLoader extends BabelOptionsLoader {
+  _getBabelOptions() {
     const babelConfig = cosmiconfigSync('babel', {
       searchStrategy: 'global',
       searchPlaces: BABEL_CONFIG_FILENAMES,
@@ -70,65 +116,14 @@ class CosmiconfigLoader {
         '.cts': defaultLoadersSync['.ts'],
         '.mts': defaultLoadersSync['.ts'],
       },
-    }).search(searchFrom);
-    return CosmiconfigLoader.#extractTopicToken(
-      babelConfig?.config ?? { plugins: [] },
-    );
+    }).search(this.searchFrom);
+
+    return babelConfig?.config ?? { plugins: [] };
   }
 
-  static #extractTopicToken({ plugins }) {
-    return plugins.find(([name]) => name === BABEL_PLUGIN_NAME)?.[1]
-      ?.topicToken;
-  }
-}
-
-export class BabelOptionsLoader {
-  static Sources = Object.freeze({
-    BABEL_LOAD_OPTIONS: 'loadOptions',
-    BABEL_LOAD_PARTIAL_CONFIG: 'loadPartialConfig',
-    COSMICONFIG: 'cosmiconfig',
-  });
-
-  #source;
-
-  constructor(searchFromPath, source = BabelOptionsLoader.Sources.COSMICONFIG) {
-    this.searchFromPath = this.#getDirectory(searchFromPath);
-    this.#source = this.#resolveSource(source);
-  }
-
-  getTopicToken() {
-    return this.#source.getTopicToken(this.searchFromPath);
-  }
-
-  #getDirectory(fileOrDirectoryPath) {
-    const resolvedPath = path.resolve(path.normalize(fileOrDirectoryPath));
-
-    let isDirectory;
-    try {
-      isDirectory = fs.lstatSync(resolvedPath).isDirectory();
-    } catch {
-      /**
-       * lstat failed, assume it's a directory (avoids pruning the directory off the end) and hand it off to cosmiconfig/babel.
-       * They'll give more specific errors if it doesn't work as the searchFrom or cwd parameters.
-       */
-      return resolvedPath;
-    }
-
-    if (isDirectory) {
-      return resolvedPath;
-    } else {
-      return path.dirname(resolvedPath);
-    }
-  }
-
-  #resolveSource(source) {
-    switch (source) {
-      case BabelOptionsLoader.Sources.BABEL_LOAD_OPTIONS:
-        return BabelLoadOptionsLoader;
-      case BabelOptionsLoader.Sources.BABEL_LOAD_PARTIAL_CONFIG:
-        return BabelLoadPartialConfigLoader;
-      default:
-        return CosmiconfigLoader;
-    }
+  _extractPluginOptions({ plugins }) {
+    const [_, pluginOptions] =
+      plugins.find(([name]) => name === BABEL_PLUGIN_NAME) ?? [];
+    return pluginOptions;
   }
 }
