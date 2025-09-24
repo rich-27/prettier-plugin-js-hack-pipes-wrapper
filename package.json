@@ -5,6 +5,7 @@
   "type": "module",
   "main": "src/plugin.js",
   "scripts": {
+    "build": "rollup --config",
     "testCheck": "prettier . --check",
     "testWrite": "prettier . --write"
   },
@@ -30,9 +31,12 @@
     "@babel/eslint-parser": "^7.28.4",
     "@babel/plugin-proposal-pipeline-operator": "^7.27.1",
     "@babel/preset-env": "^7.28.3",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "rollup": "^4.52.2"
   },
   "peerDependencies": {
     "@typescript-eslint/visitor-keys": "^8.44.1",

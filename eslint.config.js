@@ -18,7 +18,7 @@ export default defineConfig([
     },
   },
   {
-    ignores: ['vendor/**'],
+    ignores: ['dist/**','vendor/**'],
   },
   eslintConfigPrettier,
 ]);
