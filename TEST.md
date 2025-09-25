@@ -4,7 +4,10 @@
 
 ### Via API
 
-Run /test/format.js
+Run `/test/format.js`
+
+> [!NOTE]
+> It is expected behaviour that the formatted code does not match the input since `/test/format.js` does not utilise the `.prettierrc`.
 
 ### Via CLI
 
