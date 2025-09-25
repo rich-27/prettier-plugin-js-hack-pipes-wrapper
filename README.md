@@ -15,6 +15,7 @@ Prettier does not expose a pipelineOperator plugin nor provide the ability to co
 ## How it works
 
 This plugin:
+
 1. Attempts to read your Babel configuration to detect the configured topic token
 2. Wraps Prettier's `babel` JS parser, replacing the topic token for AST generation
 3. Wraps Prettier's `estree` printer to print the AST with with the correct topic token
@@ -32,7 +33,6 @@ npm install --save-dev prettier-plugin-js-hack-pipes-wrapper
 ## Usage
 
 The following is a placeholder, currently the plugin only supports [being run locally via relative resolution](https://prettier.io/docs/plugins#testing-plugins).
-
 
 ### Via Configuration File
 
@@ -80,6 +80,7 @@ Configure the pipeline operator plugin in your Babel config with your preferred 
 ### Supported Topic Tokens
 
 The plugin supports any topic token that Babel's pipeline operator plugin accepts:
+
 - `%` (default)
 - `^^`
 - `@@`
@@ -89,11 +90,13 @@ The plugin supports any topic token that Babel's pipeline operator plugin accept
 ## Examples
 
 **Input:**
+
 ```javascript
 'Pipeline operator test' |> #.length |> console.log(#);
 ```
 
 **Formatted output:**
+
 ```javascript
 'Pipeline operator test' |> #.length |> console.log(#);
 ```
