@@ -7,14 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2025-09-25
+
 ### Added
 
 - Bundling with rollup
 - Test instructions
+- @eslint/js recommended config with pattern exclusions and globals
+- LICENSE
 
 ### Changed
 
 - Refactored Babel config loading to enable bundle tree shaking
+
+### Removed
+
+- Plugin default export
 
 ## [0.1.1] - 2025-09-24
 
@@ -35,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configuration files for babel, eslint, and prettier
 - A README
 
-[unreleased]: https://github.com/rich-27/prettier-plugin-js-hack-pipes-wrapper/compare/v0.1.1...HEAD
+[unreleased]: https://github.com/rich-27/prettier-plugin-js-hack-pipes-wrapper/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/rich-27/prettier-plugin-js-hack-pipes-wrapper/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/rich-27/prettier-plugin-js-hack-pipes-wrapper/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/rich-27/prettier-plugin-js-hack-pipes-wrapper/releases/tag/v0.1.0
