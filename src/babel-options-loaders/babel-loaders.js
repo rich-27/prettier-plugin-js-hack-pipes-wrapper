@@ -4,7 +4,7 @@ import { BabelOptionsLoader } from './base-loader.js';
 
 export class BabelLoadOptionsLoader extends BabelOptionsLoader {
   _getBabelOptions() {
-    return loadOptions({ cwd: this.searchFrom });
+    return loadOptions({ cwd: this.searchFromPath });
   }
 
   _extractPluginOptions({ plugins }) {
@@ -14,7 +14,7 @@ export class BabelLoadOptionsLoader extends BabelOptionsLoader {
 
 export class BabelLoadPartialConfigLoader extends BabelOptionsLoader {
   _getBabelOptions() {
-    return loadPartialConfig({ cwd: this.searchFrom }).options;
+    return loadPartialConfig({ cwd: this.searchFromPath }).options;
   }
 
   _extractPluginOptions({ plugins }) {

@@ -13,7 +13,7 @@ export class CosmiconfigLoader extends BabelOptionsLoader {
         '.cts': defaultLoadersSync['.ts'],
         '.mts': defaultLoadersSync['.ts'],
       },
-    }).search(this.searchFrom);
+    }).search(this.searchFromPath);
 
     return babelConfig?.config ?? { plugins: [] };
   }
