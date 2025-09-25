@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import { CosmiconfigLoader as BabelOptionsLoader } from './babel-options-loader.js';
+import { CosmiconfigLoader as BabelOptionsLoader } from './babel-options-loaders/cosmiconfig-loader.js';
 import { babel as defaultParser } from '../vendor/prettier/src/language-js/parse/babel.js';
 import {
   babel as wrappedParser,
