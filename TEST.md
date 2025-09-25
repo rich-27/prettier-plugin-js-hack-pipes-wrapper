@@ -29,9 +29,27 @@ To manually test formatting:
 
 ## Using other loading methods
 
-To use `loadOptions` or `loadPartialConfig` from `@babel/core` to source the Babel configuration, replace `import { CosmiconfigLoader as BabelOptionsLoader } from './babel-options-loaders/cosmiconfig-loader.js';` in `plugin.js` with `import { BabelLoadOptionsLoader as BabelOptionsLoader } from './babel-options-loaders/babel-loaders.js';` or `import { BabelLoadPartialConfigLoader as BabelOptionsLoader } from './babel-options-loaders/babel-loaders.js';` respectively.
+To source the Babel configuration using `loadOptions` or `loadPartialConfig` from `@babel/core`, replace the following import in `plugin.js`:
+
+```js
+import { CosmiconfigLoader as BabelOptionsLoader } from './babel-options-loaders/cosmiconfig-loader.js';
+```
+
+with one of the following.
+
+If using `loadOptions`:
+
+```js
+import { BabelLoadOptionsLoader as BabelOptionsLoader } from './babel-options-loaders/babel-loaders.js';
+```
+
+If using `loadPartialConfig`:
+
+```js
+import { BabelLoadPartialConfigLoader as BabelOptionsLoader } from './babel-options-loaders/babel-loaders.js';
+```
 
 Proceed following the steps from [Standard Configuration](#standard-configuration).
 
 > [!NOTE]
-> When debugging, ensure the debugger skips "\*\*/node_modules/@babel/template/\*\*" when retrieving files, otherwise Babel's config loading/error handling will fail.
+> When debugging, ensure the debugger skips `**/node_modules/@babel/template/**` when retrieving files, otherwise Babel's config loading/error handling will fail.
